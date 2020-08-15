@@ -1,25 +1,25 @@
 // ==== Dependencies ====
-const express = require('express');
+const express = require("express");
+const path = require("path");
+const fs = require("fs");
 
-// Creating a new Epress app
+// Setting up an express server
 const app = express();
-
-// Initial port
 const PORT = process.env.PORT || 8080;
 
-
-// ==== Routers ====
-require("./Develop/routes/htmlRouter")(app);
-require("./Develop/routes/apiRouter")(app);
-
+const htmlRouter = require("./Develop/routes/htmlRouter");
+const apiRouter = require("./Develop/routes/apiRouter");
 
 // ==== Middleware ====
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join("./Develop/public")));
 
+// ==== Routes ====
+app.use("/", apiRouter);
+app.use("/", htmlRouter);
 
 // ==== Listener ====
 app.listen(PORT, () => {
-console.log(`Server is listening on port ${PORT}`);
-})
-
+  console.log(`Server is listening on port ${PORT}.`);
+});
